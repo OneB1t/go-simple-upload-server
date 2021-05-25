@@ -18,14 +18,15 @@ func run(args []string) int {
 	bindAddress := flag.String("ip", "0.0.0.0", "IP address to bind")
 	listenPort := flag.Int("port", 25478, "port number to listen on")
 	tlsListenPort := flag.Int("tlsport", 25443, "port number to listen on with TLS")
-	// 5,242,880 bytes == 5 MiB
-	maxUploadSize := flag.Int64("upload_limit", 5242880, "max size of uploaded file (byte)")
-	tokenFlag := flag.String("token", "", "specify the security token (it is automatically generated if empty)")
-	protectedMethodFlag := flag.String("protected_method", "GET,POST,HEAD,PUT", "specify methods intended to be protect by the security token")
+	// 5,242,880,000 bytes cca 5000 MiB
+	maxUploadSize := flag.Int64("upload_limit", 5242880000, "max size of uploaded file (byte)")
+	tokenFlag := flag.String("token", "f9403fc5f537b4ab333d", "specify the security token (it is automatically generated if empty)")
+	protectedMethodFlag := flag.String("protected_method", "POST,HEAD,PUT", "specify methods intended to be protect by the security token")
 	logLevelFlag := flag.String("loglevel", "info", "logging level")
 	certFile := flag.String("cert", "", "path to certificate file")
 	keyFile := flag.String("key", "", "path to key file")
 	corsEnabled := flag.Bool("cors", false, "if true, add ACAO header to support CORS")
+
 	flag.Parse()
 	serverRoot := flag.Arg(0)
 	if len(serverRoot) == 0 {
@@ -65,7 +66,7 @@ func run(args []string) int {
 	tlsEnabled := *certFile != "" && *keyFile != ""
 	server := NewServer(serverRoot, *maxUploadSize, token, *corsEnabled, protectedMethods)
 	http.Handle("/upload", server)
-	http.Handle("/files/", server)
+	http.Handle("/", server)
 
 	errors := make(chan error)
 

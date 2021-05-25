@@ -17,7 +17,7 @@ import (
 
 var (
 	rePathUpload = regexp.MustCompile(`^/upload$`)
-	rePathFiles  = regexp.MustCompile(`^/files/([^/]+)$`)
+	rePathFiles  = regexp.MustCompile(`^/([^/]+)$`)
 
 	errTokenMismatch = errors.New("token mismatched")
 	errMissingToken  = errors.New("missing token")
@@ -53,7 +53,7 @@ func (s Server) handleGet(w http.ResponseWriter, r *http.Request) {
 	if s.EnableCORS {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 	}
-	http.StripPrefix("/files/", http.FileServer(http.Dir(s.DocumentRoot))).ServeHTTP(w, r)
+	http.StripPrefix("/", http.FileServer(http.Dir(s.DocumentRoot))).ServeHTTP(w, r)
 }
 
 func (s Server) handlePost(w http.ResponseWriter, r *http.Request) {

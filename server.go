@@ -118,7 +118,7 @@ func (s Server) handlePost(w http.ResponseWriter, r *http.Request) {
 	if !strings.HasPrefix(uploadedURL, "/") {
 		uploadedURL = "/" + uploadedURL
 	}
-	uploadedURL = "/files" + uploadedURL
+	uploadedURL = "/" + uploadedURL
 	logger.WithFields(logrus.Fields{
 		"path": dstPath,
 		"url":  uploadedURL,
